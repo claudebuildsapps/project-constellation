@@ -1,0 +1,23 @@
+{
+  "name": "text-receiver",
+  "version": "1.0.0",
+  "description": "A service that connects to Twilio VoIP with online/offline mode",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "twilio",
+    "voip",
+    "online",
+    "offline"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "twilio": "^4.19.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
