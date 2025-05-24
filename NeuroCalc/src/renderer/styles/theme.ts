@@ -42,6 +42,7 @@ export const theme = {
       secondary: '#ffffff',
       tertiary: '#f5f5f5',
       overlay: 'rgba(0, 0, 0, 0.5)',
+      hover: '#f8f9fa',
     },
     text: {
       primary: '#1f2937',

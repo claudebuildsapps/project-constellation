@@ -70,6 +70,27 @@ export const LazyEmergencyHelp = lazy(() =>
   import('./EmergencyHelp').then(module => ({ default: module.default }))
 );
 
+export const LazyExplorerView = lazy(() => 
+  import('./ExplorerView').then(module => ({ default: module.default }))
+);
+
+export const LazyComparatorView = lazy(() => 
+  import('./ComparatorView').then(module => ({ default: module.default }))
+);
+
+// Performance-critical components with dynamic imports
+export const LazyComparisonTable = lazy(() => 
+  import('./compare/ComparisonTable').then(module => ({ default: module.default }))
+);
+
+export const LazySubstanceSelector = lazy(() => 
+  import('./SubstanceSelector').then(module => ({ default: module.default }))
+);
+
+export const LazyDosageControls = lazy(() => 
+  import('./DosageControls').then(module => ({ default: module.default }))
+);
+
 // Higher-order component for lazy loading with custom fallback
 export function withLazyLoading<P extends {}>(
   LazyComponent: React.LazyExoticComponent<React.ComponentType<P>>,
@@ -84,7 +105,7 @@ export function withLazyLoading<P extends {}>(
   };
 }
 
-// Preload function for critical components
+// Preload function for critical components with optimization
 export const preloadComponents = async () => {
   // Preload heavy chart components in the background
   const chartImports = [
@@ -93,11 +114,52 @@ export const preloadComponents = async () => {
     import('./charts/NeurotransmitterDashboard'),
   ];
 
+  // Preload performance-critical components for comparison view
+  const comparisonImports = [
+    import('./compare/ComparisonTable'),
+    import('./SubstanceSelector'),
+    import('./DosageControls'),
+  ];
+
   try {
+    // Load charts first (lower priority)
     await Promise.all(chartImports);
     console.log('Chart components preloaded successfully');
+    
+    // Then load comparison components (higher priority)
+    await Promise.all(comparisonImports);
+    console.log('Comparison components preloaded successfully');
   } catch (error) {
-    console.warn('Failed to preload some chart components:', error);
+    console.warn('Failed to preload some components:', error);
+  }
+};
+
+// Selective preloading for specific views
+export const preloadChartsOnly = async () => {
+  const chartImports = [
+    import('./charts/DoseResponseChart'),
+    import('./charts/TimelineChart'),
+    import('./charts/NeurotransmitterDashboard'),
+  ];
+  
+  try {
+    await Promise.all(chartImports);
+  } catch (error) {
+    console.warn('Failed to preload chart components:', error);
+  }
+};
+
+export const preloadComparisonOnly = async () => {
+  const comparisonImports = [
+    import('./compare/ComparisonTable'),
+    import('./SubstanceSelector'),
+    import('./DosageControls'),
+  ];
+  
+  try {
+    await Promise.all(comparisonImports);
+  } catch (error) {
+    console.warn('Failed to preload comparison components:', error);
   }
 };
 
@@ -110,6 +172,11 @@ export const HelpSystem = withLazyLoading(LazyHelpSystem, "Loading help system..
 export const AboutView = withLazyLoading(LazyAboutView, "Loading about page...");
 export const SafetyDisclaimer = withLazyLoading(LazySafetyDisclaimer, "Loading safety information...");
 export const EmergencyHelp = withLazyLoading(LazyEmergencyHelp, "Loading emergency resources...");
+export const ExplorerView = withLazyLoading(LazyExplorerView, "Loading explorer...");
+export const ComparatorView = withLazyLoading(LazyComparatorView, "Loading comparator...");
+export const ComparisonTable = withLazyLoading(LazyComparisonTable, "Loading comparison table...");
+export const SubstanceSelector = withLazyLoading(LazySubstanceSelector, "Loading substance selector...");
+export const DosageControls = withLazyLoading(LazyDosageControls, "Loading dosage controls...");
 
 // Export loading fallback for reuse
 export { LoadingFallback };

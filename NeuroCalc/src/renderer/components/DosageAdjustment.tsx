@@ -5,11 +5,12 @@ import { createLLMService } from '../utils/llmService';
 import { Substance, SafetyCheck } from '../types';
 
 const AdjustmentContainer = styled.div`
-  background: ${props => props.theme.colors.surface};
+  background: ${props => props.theme.colors.background.secondary};
   border-radius: 8px;
   padding: 16px;
   margin: 16px 0;
-  border: 1px solid ${props => props.theme.colors.border};
+  border: 1px solid ${props => props.theme.colors.border.light};
+  flex-shrink: 0;
 `;
 
 const SectionHeader = styled.div`
@@ -23,7 +24,7 @@ const SectionTitle = styled.h3`
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: ${props => props.theme.colors.text};
+  color: ${props => props.theme.colors.text.primary};
   display: flex;
   align-items: center;
   gap: 8px;
@@ -33,16 +34,16 @@ const ToggleButton = styled.button.withConfig({
   shouldForwardProp: (prop) => !['active'].includes(prop),
 })<{ active: boolean }>`
   padding: 6px 12px;
-  border: 1px solid ${props => props.theme.colors.border};
+  border: 1px solid ${props => props.theme.colors.border.medium};
   border-radius: 4px;
-  background: ${props => props.active ? props.theme.colors.primary : props.theme.colors.surface};
-  color: ${props => props.active ? 'white' : props.theme.colors.text};
+  background: ${props => props.active ? props.theme.colors.primary[500] : props.theme.colors.background.secondary};
+  color: ${props => props.active ? 'white' : props.theme.colors.text.primary};
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.active ? props.theme.colors.primaryDark : props.theme.colors.backgroundHover};
+    background: ${props => props.active ? props.theme.colors.primary[600] : props.theme.colors.background.hover};
   }
 `;
 

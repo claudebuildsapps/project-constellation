@@ -4,18 +4,20 @@ import styled from 'styled-components';
 interface VirtualizedListProps<T> {
   items: T[];
   itemHeight: number;
-  containerHeight: number;
+  containerHeight: number | string;
   renderItem: (item: T, index: number) => React.ReactNode;
   overscan?: number;
   onScroll?: (scrollTop: number) => void;
   className?: string;
 }
 
-const ListContainer = styled.div<{ height: number }>`
-  height: ${props => props.height}px;
+const ListContainer = styled.div<{ height: number | string }>`
+  height: ${props => typeof props.height === 'number' ? `${props.height}px` : props.height};
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+  flex: 1;
+  min-height: 0;
 `;
 
 const ListInner = styled.div<{ height: number }>`
@@ -42,21 +44,40 @@ function VirtualizedList<T>({
   className,
 }: VirtualizedListProps<T>) {
   const [scrollTop, setScrollTop] = useState(0);
+  const [actualHeight, setActualHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Update actual height when container is available
+  useEffect(() => {
+    if (containerRef.current && typeof containerHeight === 'string') {
+      const resizeObserver = new ResizeObserver((entries) => {
+        const { height } = entries[0].contentRect;
+        setActualHeight(height);
+      });
+      
+      resizeObserver.observe(containerRef.current);
+      
+      return () => resizeObserver.disconnect();
+    }
+  }, [containerHeight]);
+
+  const effectiveHeight = typeof containerHeight === 'number' ? containerHeight : actualHeight;
 
   // Calculate visible range
   const visibleRange = useMemo(() => {
+    if (effectiveHeight === 0) return { startIndex: 0, endIndex: 0 };
+    
     const start = Math.floor(scrollTop / itemHeight);
     const end = Math.min(
       items.length - 1,
-      Math.ceil((scrollTop + containerHeight) / itemHeight)
+      Math.ceil((scrollTop + effectiveHeight) / itemHeight)
     );
 
     const startIndex = Math.max(0, start - overscan);
     const endIndex = Math.min(items.length - 1, end + overscan);
 
     return { startIndex, endIndex };
-  }, [scrollTop, itemHeight, containerHeight, items.length, overscan]);
+  }, [scrollTop, itemHeight, effectiveHeight, items.length, overscan]);
 
   // Handle scroll events
   const handleScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {

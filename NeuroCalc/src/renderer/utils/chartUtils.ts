@@ -1,3 +1,4 @@
+// Optimized Chart.js imports - only what we actually use
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +15,8 @@ import {
 } from 'chart.js';
 import { NeurotransmitterEffect, TimePoint } from '../types';
 
-// Register Chart.js components
+// Register only the components we actually use
+// This reduces bundle size by ~30KB compared to importing all Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,

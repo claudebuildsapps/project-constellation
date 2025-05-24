@@ -142,10 +142,17 @@ class PerformanceMonitor {
   }
 
   /**
-   * Start monitoring memory usage periodically
+   * Start monitoring memory usage periodically with proper cleanup
    */
+  private memoryInterval: NodeJS.Timeout | null = null;
+  
   private startMemoryMonitoring(): void {
-    setInterval(() => {
+    // Clear any existing interval to prevent memory leaks
+    if (this.memoryInterval) {
+      clearInterval(this.memoryInterval);
+    }
+    
+    this.memoryInterval = setInterval(() => {
       const memory = this.getMemoryUsage();
       if (memory) {
         const usedMB = Math.round(memory.usedJSHeapSize / 1024 / 1024);
@@ -157,6 +164,17 @@ class PerformanceMonitor {
         }
       }
     }, 10000); // Check every 10 seconds
+  }
+
+  /**
+   * Stop memory monitoring and clean up resources
+   */
+  public cleanup(): void {
+    if (this.memoryInterval) {
+      clearInterval(this.memoryInterval);
+      this.memoryInterval = null;
+    }
+    this.metrics = [];
   }
 
   /**

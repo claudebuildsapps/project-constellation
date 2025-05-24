@@ -45,12 +45,7 @@ class MainApp {
     });
 
     // Load the app
-    if (process.env.NODE_ENV === 'development') {
-      this.mainWindow.loadFile(path.join(__dirname, 'index.html'));
-      this.mainWindow.webContents.openDevTools();
-    } else {
-      this.mainWindow.loadFile(path.join(__dirname, 'index.html'));
-    }
+    this.mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
     this.mainWindow.once('ready-to-show', () => {
       this.mainWindow?.show();

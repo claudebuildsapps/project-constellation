@@ -11,9 +11,9 @@ interface ExtendedSubstanceCategory extends SubstanceCategory {
 
 export const substanceCategories: ExtendedSubstanceCategory[] = [
   {
-    id: 'stimulants',
+    id: 'stimulant',
     name: 'Stimulants',
-    icon: '💊',
+    icon: '⚡',
     description: 'Substances that increase alertness, attention, and energy',
     detailedDescription: 'Stimulants work by increasing neurotransmitter activity, particularly dopamine and norepinephrine. They can enhance focus, reduce fatigue, and increase physical and mental performance.',
     color: '#EF4444', // Red
@@ -24,7 +24,20 @@ export const substanceCategories: ExtendedSubstanceCategory[] = [
     substances: []
   },
   {
-    id: 'depressants',
+    id: 'medication',
+    name: 'Medications',
+    icon: '💊',
+    description: 'Prescription medications for treating various conditions',
+    detailedDescription: 'Medications work by altering neurotransmitter levels, particularly serotonin, norepinephrine, and dopamine, to improve mood and emotional regulation or treat specific medical conditions.',
+    color: '#06B6D4', // Cyan
+    safetyLevel: 'low',
+    commonEffects: ['Therapeutic effects', 'Improved symptoms', 'Mood stabilization', 'Better function'],
+    safetyWarnings: ['Prescription required', 'Side effects possible', 'Withdrawal syndrome', 'Drug interactions'],
+    medicalUse: true,
+    substances: []
+  },
+  {
+    id: 'depressant',
     name: 'Depressants',
     icon: '🌙',
     description: 'Substances that reduce arousal and stimulation',
@@ -37,11 +50,11 @@ export const substanceCategories: ExtendedSubstanceCategory[] = [
     substances: []
   },
   {
-    id: 'hallucinogens',
-    name: 'Hallucinogens',
+    id: 'psychedelic',
+    name: 'Psychedelics',
     icon: '🌈',
     description: 'Substances that alter perception and consciousness',
-    detailedDescription: 'Hallucinogens primarily affect serotonin systems, causing profound changes in perception, thought, and emotional experience. Effects can be unpredictable.',
+    detailedDescription: 'Psychedelics primarily affect serotonin systems, causing profound changes in perception, thought, and emotional experience. Effects can be unpredictable.',
     color: '#8B5CF6', // Purple
     safetyLevel: 'high',
     commonEffects: ['Visual distortions', 'Altered time perception', 'Emotional intensity', 'Spiritual experiences'],
@@ -50,119 +63,116 @@ export const substanceCategories: ExtendedSubstanceCategory[] = [
     substances: []
   },
   {
-    id: 'opioids',
-    name: 'Opioids',
-    icon: '💉',
-    description: 'Pain-relieving substances that affect opioid receptors',
-    detailedDescription: 'Opioids bind to opioid receptors in the brain and spinal cord, providing powerful pain relief but also producing euphoria and physical dependence.',
+    id: 'dissociative',
+    name: 'Dissociatives',
+    icon: '🌀',
+    description: 'Substances that cause feelings of detachment from reality',
+    detailedDescription: 'Dissociatives work primarily through NMDA receptor antagonism, causing feelings of detachment from the body and environment.',
     color: '#F59E0B', // Amber
-    safetyLevel: 'extreme',
-    commonEffects: ['Pain relief', 'Euphoria', 'Drowsiness', 'Constipation'],
-    safetyWarnings: ['Extremely high addiction potential', 'Respiratory depression', 'Overdose risk', 'Severe withdrawal symptoms'],
+    safetyLevel: 'high',
+    commonEffects: ['Detachment from reality', 'Out-of-body experiences', 'Anesthesia', 'Memory impairment'],
+    safetyWarnings: ['Risk of accidents due to dissociation', 'Potential for psychological dependence', 'Bladder damage with chronic use', 'Dangerous in combination with other substances'],
     medicalUse: true,
     substances: []
   },
   {
-    id: 'anxiolytics',
-    name: 'Anxiolytics',
-    icon: '🧘',
-    description: 'Substances used to treat anxiety and promote calmness',
-    detailedDescription: 'Anxiolytics work primarily through GABA enhancement, reducing anxiety and promoting calm. Many are also used as muscle relaxants and sleep aids.',
-    color: '#10B981', // Green
-    safetyLevel: 'moderate',
-    commonEffects: ['Reduced anxiety', 'Calm feeling', 'Muscle relaxation', 'Improved sleep'],
-    safetyWarnings: ['Dependency potential', 'Cognitive impairment', 'Fall risk in elderly', 'Interaction with alcohol'],
-    medicalUse: true,
-    substances: []
-  },
-  {
-    id: 'antidepressants',
-    name: 'Antidepressants',
-    icon: '💭',
-    description: 'Substances used to treat depression and mood disorders',
-    detailedDescription: 'Antidepressants work by altering neurotransmitter levels, particularly serotonin, norepinephrine, and dopamine, to improve mood and emotional regulation.',
-    color: '#06B6D4', // Cyan
+    id: 'mood-stabilizer',
+    name: 'Mood Stabilizers',
+    icon: '⚖️',
+    description: 'Medications used to treat bipolar disorder and mood swings',
+    detailedDescription: 'Mood stabilizers help regulate mood episodes in bipolar disorder by affecting neurotransmitter systems and neural excitability. They prevent both manic and depressive episodes.',
+    color: '#059669', // Emerald
     safetyLevel: 'low',
-    commonEffects: ['Improved mood', 'Reduced anxiety', 'Better sleep', 'Increased energy'],
-    safetyWarnings: ['Initial worsening of symptoms', 'Suicidal ideation in young adults', 'Withdrawal syndrome', 'Sexual side effects'],
+    commonEffects: ['Mood stabilization', 'Reduced mood swings', 'Prevention of episodes', 'Emotional regulation'],
+    safetyWarnings: ['Requires regular blood monitoring', 'Potential kidney/liver effects', 'Drug interactions', 'Pregnancy considerations'],
     medicalUse: true,
+    substances: []
+  },
+  {
+    id: 'antihypertensive',
+    name: 'Blood Pressure Medications',
+    icon: '🫀',
+    description: 'Medications used to treat high blood pressure and cardiovascular conditions',
+    detailedDescription: 'Antihypertensive medications work through various mechanisms to reduce blood pressure, including vasodilation, diuresis, and cardiac output reduction.',
+    color: '#DC2626', // Red
+    safetyLevel: 'low',
+    commonEffects: ['Reduced blood pressure', 'Improved circulation', 'Reduced cardiac workload', 'Vascular protection'],
+    safetyWarnings: ['Monitor blood pressure regularly', 'Risk of hypotension', 'Electrolyte imbalances', 'Gradual discontinuation required'],
+    medicalUse: true,
+    substances: []
+  },
+  {
+    id: 'other',
+    name: 'Other Substances',
+    icon: '⚗️',
+    description: 'Miscellaneous substances that don\'t fit standard categories',
+    detailedDescription: 'Various substances with unique mechanisms of action that don\'t fit neatly into traditional pharmacological categories.',
+    color: '#6B7280', // Gray
+    safetyLevel: 'moderate',
+    commonEffects: ['Variable effects', 'Substance-specific actions'],
+    safetyWarnings: ['Research individual substances carefully', 'Effects may be unpredictable', 'Safety profiles vary widely'],
+    medicalUse: false,
     substances: []
   }
 ];
 
-// Top 10 substances for each category as specified in the specification
+// Substance IDs for each category based on actual data
+// Note: Substances can appear in multiple categories due to crossover effects
 export const categorySubstances = {
-  stimulants: [
+  stimulant: [
     'caffeine',
-    'adderall', // Amphetamine
-    'ritalin', // Methylphenidate
-    'vyvanse', // Lisdexamfetamine
-    'cocaine',
-    'methamphetamine',
-    'nicotine',
+    'adderall',
+    'ritalin', 
+    'vyvanse',
     'modafinil',
-    'mdma',
-    'ephedrine'
+    'nicotine',
+    'wellbutrin',  // Crossover: NDRI with stimulant properties
+    'kratom'       // Crossover: Stimulant effects at low doses
   ],
-  depressants: [
+  medication: [
+    'wellbutrin',
+    'prozac',
+    'zoloft', 
+    'lexapro',
+    'adderall',
+    'ritalin',
+    'vyvanse',
+    'ketamine',    // Crossover: FDA-approved for treatment-resistant depression
+    'xanax',       // Crossover: Prescription medication
+    'valium'       // Crossover: Prescription medication
+  ],
+  depressant: [
     'alcohol',
-    'xanax', // Alprazolam
-    'valium', // Diazepam
-    'ambien', // Zolpidem
-    'klonopin', // Clonazepam
-    'ativan', // Lorazepam
-    'barbiturates',
-    'ghb',
-    'rohypnol',
-    'melatonin'
+    'xanax',
+    'valium',
+    'melatonin',   // Crossover: Sleep-inducing effects
+    'l-theanine',  // Crossover: Calming/relaxing effects
+    'phenibut',    // Crossover: GABA effects, sedating
+    'kratom'       // Crossover: Sedating at higher doses
   ],
-  hallucinogens: [
+  psychedelic: [
     'lsd',
     'psilocybin',
-    'dmt',
-    'mescaline',
+    'dmt',         // Crossover: Classic psychedelic compound
+    'cannabis',    // Crossover: Can produce psychedelic effects at higher doses
+    'ketamine'     // Crossover: Psychedelic therapy applications
+  ],
+  dissociative: [
     'ketamine',
+    'dxm',
     'pcp',
-    'salvia',
-    '2c-b',
-    'ayahuasca',
-    'dxm'
+    'nitrous-oxide',
+    'salvia'       // Crossover: Dissociative-like effects via kappa-opioid
   ],
-  opioids: [
-    'morphine',
-    'oxycodone',
-    'heroin',
-    'fentanyl',
-    'codeine',
-    'hydrocodone',
-    'tramadol',
-    'methadone',
-    'buprenorphine',
-    'kratom'
-  ],
-  anxiolytics: [
-    'xanax', // Alprazolam
-    'valium', // Diazepam
-    'klonopin', // Clonazepam
-    'ativan', // Lorazepam
-    'buspirone',
-    'propranolol',
-    'hydroxyzine',
+  other: [
+    'cannabis',
+    'cbd',
+    'kratom',
+    'melatonin',
     'l-theanine',
-    'gabapentin',
-    'cbd'
-  ],
-  antidepressants: [
-    'prozac', // Fluoxetine
-    'zoloft', // Sertraline
-    'lexapro', // Escitalopram
-    'wellbutrin', // Bupropion
-    'paxil', // Paroxetine
-    'cymbalta', // Duloxetine
-    'effexor', // Venlafaxine
-    'celexa', // Citalopram
-    'trazodone',
-    'st-johns-wort'
+    'phenibut',
+    'dmt',
+    'salvia'
   ]
 };
 
@@ -173,6 +183,7 @@ export function getCategoryById(id: string): SubstanceCategory | undefined {
 
 // Helper function to get substances for a category
 export function getSubstancesForCategory(categoryId: string, allSubstances: Substance[]): Substance[] {
+  // Use manual mapping to support crossover substances in multiple categories
   const categorySubstanceIds = categorySubstances[categoryId as keyof typeof categorySubstances];
   if (!categorySubstanceIds) return [];
   
@@ -183,7 +194,7 @@ export function getSubstancesForCategory(categoryId: string, allSubstances: Subs
       substance.aliases.some(alias => alias.toLowerCase().replace(/\s+/g, '-') === id)
     ))
     .filter((substance): substance is Substance => substance !== undefined)
-    .slice(0, 10); // Ensure we only return top 10
+    .slice(0, 10);
 }
 
 // Helper function to populate categories with actual substances

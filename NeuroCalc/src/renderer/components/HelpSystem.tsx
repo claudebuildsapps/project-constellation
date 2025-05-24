@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import styled from 'styled-components';
 
 const HelpContainer = styled.div`
@@ -558,4 +558,4 @@ export const HelpSystem: React.FC = () => {
   );
 };
 
-export default HelpSystem;
+export default memo(HelpSystem);

@@ -131,3 +131,44 @@ dist_electron/
 .next/
 .nuxt/
 .gatsby/
+
+# NeuroCalc specific
+# Worker compiled files
+src/renderer/workers/*.js
+src/renderer/workers/*.js.map
+
+# Performance monitoring
+performance_*.json
+benchmark_*.log
+
+# User data
+user_preferences.json
+session_*.json
+
+# Temporary calculation files
+calc_temp_*
+similarity_cache_*
+
+# Test artifacts
+test_results/
+coverage_reports/
+
+# Development artifacts
+*.local.md
+.vscode/settings.json
+.eslintcache
+
+# Project parent directory artifacts (should be ignored at parent level)
+../.DS_Store
+../.env
+../AGENTS/
+../Anthropic/
+../Boilerplate/
+../CI/
+../CLAUDE.md
+../ClaudeCache/
+../deprecated/
+../HashAI/
+../ModelBenchmarking/
+../Proposals/
+../test_*

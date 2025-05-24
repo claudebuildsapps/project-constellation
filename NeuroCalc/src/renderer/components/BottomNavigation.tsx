@@ -102,9 +102,10 @@ interface NavigationItem {
 }
 
 const navigationItems: NavigationItem[] = [
-  { id: 'substances', label: 'Substances', icon: '💊' },
   { id: 'explorer', label: 'Explorer', icon: '🔍' },
+  { id: 'substances', label: 'Substances', icon: '💊' },
   { id: 'effects', label: 'Effects', icon: '📊' },
+  { id: 'compare', label: 'Compare', icon: '⚖️' },
   { id: 'help', label: 'Help', icon: '❓' },
   { id: 'settings', label: 'Settings', icon: '⚙️' },
   { id: 'about', label: 'About', icon: 'ℹ️' },

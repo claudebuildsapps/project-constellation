@@ -124,29 +124,57 @@ module.exports = [
     optimization: {
       splitChunks: {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
             enforce: true,
+            priority: 10,
           },
           react: {
             test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
             name: 'react',
             chunks: 'all',
             enforce: true,
+            priority: 20,
           },
           charts: {
             test: /[\\/]node_modules[\\/](chart\.js|react-chartjs-2|chartjs-)[\\/]/,
             name: 'charts',
             chunks: 'all',
             enforce: true,
+            priority: 15,
+          },
+          comparison: {
+            test: /[\\/]src[\\/]renderer[\\/](utils[\\/](similarityCalculator|comparisonCalculator)|components[\\/]compare)[\\/]/,
+            name: 'comparison',
+            chunks: 'all',
+            enforce: true,
+            priority: 25,
+          },
+          substances: {
+            test: /[\\/]src[\\/]renderer[\\/](data[\\/]substances|components[\\/]SubstanceSelector)[\\/]/,
+            name: 'substances',
+            chunks: 'all',
+            enforce: true,
+            priority: 25,
+          },
+          utilities: {
+            test: /[\\/]src[\\/]renderer[\\/]utils[\\/]/,
+            name: 'utilities',
+            chunks: 'all',
+            minChunks: 2,
+            priority: 5,
           },
         },
       },
       usedExports: true,
       sideEffects: false,
+      moduleIds: 'deterministic',
+      runtimeChunk: 'single',
     },
     performance: {
       hints: isProduction ? 'warning' : false,
