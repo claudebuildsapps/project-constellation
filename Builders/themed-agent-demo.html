@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15-Theme Marketing Demo - Revolutionary Visual Adaptation</title>
+    <style>
+        /* Base styles that work with all themes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body, 'Inter, sans-serif');
+            background: var(--color-background, #0a0a0a);
+            color: var(--color-text, #ffffff);
+            min-height: 100vh;
+            transition: all 0.5s ease;
+        }
+        
+        .header {
+            padding: 2rem;
+            text-align: center;
+            background: var(--color-surface, #1a1a1a);
+            border-bottom: 2px solid var(--color-primary, #00ff41);
+        }
+        
+        .title {
+            font-family: var(--font-heading, 'Orbitron, monospace');
+            font-size: 2.5rem;
+            color: var(--color-primary, #00ff41);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--color-primary, #00ff41);
+        }
+        
+        .subtitle {
+            color: var(--color-secondary, #ff0080);
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .theme-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .theme-card {
+            background: var(--color-surface, #1a1a1a);
+            border: 2px solid var(--color-primary, #00ff41);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .theme-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--color-accent, #00ffff), transparent);
+            opacity: 0.1;
+            transition: left 0.5s;
+        }
+        
+        .theme-card:hover::before {
+            left: 100%;
+        }
+        
+        .theme-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px var(--color-primary, #00ff41);
+            border-color: var(--color-accent, #00ffff);
+        }
+        
+        .theme-name {
+            font-family: var(--font-heading, 'Orbitron, monospace');
+            font-size: 1.3rem;
+            color: var(--color-primary, #00ff41);
+            margin-bottom: 1rem;
+        }
+        
+        .theme-target {
+            color: var(--color-secondary, #ff0080);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .theme-style {
+            color: var(--color-text, #ffffff);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        .theme-mood {
+            color: var(--color-accent, #00ffff);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--color-text, #ffffff);
+        }
+        
+        .current-theme-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: var(--color-surface, #1a1a1a);
+            border: 2px solid var(--color-primary, #00ff41);
+            border-radius: 10px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .current-theme-name {
+            font-family: var(--font-heading, 'Orbitron, monospace');
+            color: var(--color-primary, #00ff41);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .current-theme-target {
+            color: var(--color-secondary, #ff0080);
+            font-size: 0.9rem;
+        }
+        
+        .theme-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .control-btn {
+            background: var(--color-surface, #1a1a1a);
+            border: 1px solid var(--color-primary, #00ff41);
+            color: var(--color-primary, #00ff41);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-mono, 'monospace');
+        }
+        
+        .control-btn:hover {
+            background: var(--color-primary, #00ff41);
+            color: var(--color-background, #0a0a0a);
+            box-shadow: 0 0 20px var(--color-primary, #00ff41);
+        }
+        
+        .auto-cycle-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-surface, #1a1a1a);
+            border: 2px solid var(--color-accent, #00ffff);
+            border-radius: 10px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cycle-status {
+            color: var(--color-accent, #00ffff);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .cycle-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--color-accent, #00ffff);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        
+        .demo-stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--color-surface, #1a1a1a);
+            border: 2px solid var(--color-secondary, #ff0080);
+            border-radius: 10px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .stat-label {
+            color: var(--color-text, #ffffff);
+        }
+        
+        .stat-value {
+            color: var(--color-secondary, #ff0080);
+            font-weight: bold;
+        }
+        
+        /* Theme-specific overrides */
+        .theme-corporate-minimal {
+            --font-heading: 'Inter', -apple-system, sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+        
+        .theme-cyberpunk-hacker {
+            --font-heading: 'Orbitron', monospace;
+            --font-body: 'Share Tech Mono', monospace;
+        }
+        
+        .theme-retro-gaming {
+            --font-heading: 'Press Start 2P', cursive;
+            --font-body: 'Pixelify Sans', cursive;
+        }
+        
+        .theme-glassmorphism .theme-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .theme-vintage-terminal {
+            font-family: 'Courier New', monospace;
+        }
+        
+        .theme-vintage-terminal * {
+            font-family: 'Courier New', monospace !important;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Press+Start+2P&family=Audiowide&family=Rajdhani:wght@300;400;700&family=VT323&family=Exo+2:wght@400;700&family=Poppins:wght@300;400;700&family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-cyberpunk-hacker">
+    <div class="header">
+        <h1 class="title">15-Theme Visual Revolution</h1>
+        <p class="subtitle">Adaptive Marketing Demonstrations Across Every Industry & Aesthetic</p>
+    </div>
+    
+    <div class="demo-stats">
+        <div class="stat-item">
+            <span class="stat-label">Total Themes:</span>
+            <span class="stat-value" id="totalThemes">15</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Industries:</span>
+            <span class="stat-value">12+</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Aesthetics:</span>
+            <span class="stat-value">All</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Adaptability:</span>
+            <span class="stat-value">100%</span>
+        </div>
+    </div>
+    
+    <div class="current-theme-indicator">
+        <div class="current-theme-name" id="currentThemeName">Cyberpunk Hacker</div>
+        <div class="current-theme-target" id="currentThemeTarget">Senior Engineers, Tech Innovators</div>
+    </div>
+    
+    <div class="auto-cycle-indicator">
+        <div class="cycle-status">
+            <div class="cycle-dot"></div>
+            <span>Auto-cycling themes</span>
+        </div>
+    </div>
+    
+    <div class="theme-showcase" id="themeShowcase">
+        <!-- Theme cards will be dynamically generated -->
+    </div>
+    
+    <div class="theme-controls">
+        <button class="control-btn" onclick="toggleAutoCycle()">⏸️ Pause</button>
+        <button class="control-btn" onclick="randomTheme()">🎲 Random</button>
+        <button class="control-btn" onclick="exportThemes()">💾 Export</button>
+    </div>
+
+    <script src="theme-system.js"></script>
+    <script>
+        class ThemedMarketingDemo {
+            constructor() {
+                this.themeSystem = new ThemeSystem();
+                this.autoCycleActive = true;
+                this.cycleInterval = null;
+                this.currentThemeIndex = 0;
+                this.themeList = this.themeSystem.getThemeList();
+                
+                this.init();
+            }
+            
+            init() {
+                this.renderThemeCards();
+                this.startAutoCycle();
+                this.updateCurrentThemeDisplay();
+            }
+            
+            renderThemeCards() {
+                const container = document.getElementById('themeShowcase');
+                container.innerHTML = '';
+                
+                this.themeList.forEach((theme, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'theme-card';
+                    card.onclick = () => this.selectTheme(theme.id, index);
+                    
+                    // Get theme colors for palette
+                    const themeData = this.themeSystem.themes[theme.id];
+                    const colors = themeData.colors;
+                    
+                    card.innerHTML = `
+                        <div class="theme-name">${theme.name}</div>
+                        <div class="theme-target">Target: ${theme.target}</div>
+                        <div class="color-palette">
+                            <div class="color-swatch" style="background: ${colors.primary}"></div>
+                            <div class="color-swatch" style="background: ${colors.secondary}"></div>
+                            <div class="color-swatch" style="background: ${colors.accent}"></div>
+                        </div>
+                        <div class="theme-style">Style: ${theme.style}</div>
+                        <div class="theme-mood">Mood: ${theme.mood}</div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            }
+            
+            selectTheme(themeId, index) {
+                this.themeSystem.applyTheme(themeId);
+                this.currentThemeIndex = index;
+                this.updateCurrentThemeDisplay();
+                
+                // Visual feedback
+                this.highlightSelectedCard(index);
+            }
+            
+            highlightSelectedCard(index) {
+                const cards = document.querySelectorAll('.theme-card');
+                cards.forEach((card, i) => {
+                    if (i === index) {
+                        card.style.transform = 'translateY(-15px) scale(1.05)';
+                        card.style.zIndex = '10';
+                    } else {
+                        card.style.transform = '';
+                        card.style.zIndex = '';
+                    }
+                });
+                
+                // Reset after animation
+                setTimeout(() => {
+                    cards[index].style.transform = '';
+                    cards[index].style.zIndex = '';
+                }, 1000);
+            }
+            
+            updateCurrentThemeDisplay() {
+                const currentTheme = this.themeList[this.currentThemeIndex];
+                document.getElementById('currentThemeName').textContent = currentTheme.name;
+                document.getElementById('currentThemeTarget').textContent = currentTheme.target;
+            }
+            
+            startAutoCycle() {
+                this.cycleInterval = setInterval(() => {
+                    if (this.autoCycleActive) {
+                        this.nextTheme();
+                    }
+                }, 4000); // Change theme every 4 seconds
+            }
+            
+            nextTheme() {
+                this.currentThemeIndex = (this.currentThemeIndex + 1) % this.themeList.length;
+                const nextTheme = this.themeList[this.currentThemeIndex];
+                this.selectTheme(nextTheme.id, this.currentThemeIndex);
+            }
+            
+            toggleAutoCycle() {
+                this.autoCycleActive = !this.autoCycleActive;
+                const btn = document.querySelector('.theme-controls .control-btn');
+                btn.textContent = this.autoCycleActive ? '⏸️ Pause' : '▶️ Play';
+                
+                // Update indicator
+                const indicator = document.querySelector('.cycle-status span');
+                indicator.textContent = this.autoCycleActive ? 'Auto-cycling themes' : 'Cycle paused';
+            }
+            
+            randomTheme() {
+                const randomIndex = Math.floor(Math.random() * this.themeList.length);
+                const randomTheme = this.themeList[randomIndex];
+                this.selectTheme(randomTheme.id, randomIndex);
+            }
+            
+            exportThemes() {
+                this.themeSystem.exportThemes();
+            }
+        }
+        
+        // Global functions
+        let demo;
+        
+        function toggleAutoCycle() {
+            demo.toggleAutoCycle();
+        }
+        
+        function randomTheme() {
+            demo.randomTheme();
+        }
+        
+        function exportThemes() {
+            demo.exportThemes();
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            demo = new ThemedMarketingDemo();
+            
+            // Show initial theme after a brief delay
+            setTimeout(() => {
+                demo.selectTheme('cyberpunk-hacker', 2);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

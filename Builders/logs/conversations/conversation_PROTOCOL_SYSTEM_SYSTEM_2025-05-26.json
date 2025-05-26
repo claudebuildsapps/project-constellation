@@ -1,0 +1,33 @@
+{
+  "conversationId": "conversation_PROTOCOL_SYSTEM_SYSTEM_2025-05-26",
+  "metadata": {
+    "id": "conversation_PROTOCOL_SYSTEM_SYSTEM_2025-05-26",
+    "participants": [
+      "PROTOCOL_SYSTEM",
+      "SYSTEM"
+    ],
+    "startTime": "2025-05-26T22:17:11.256Z",
+    "messageCount": 1,
+    "lastActivity": "2025-05-26T22:17:11.256Z"
+  },
+  "messages": [
+    {
+      "id": "log_1748297831255_mhgvw1",
+      "sessionId": "session_1748297831254_vxva88v0",
+      "timestamp": "2025-05-26T22:17:11.255Z",
+      "level": "DEBUG",
+      "messageId": "msg_1748297831255_5px9yz6yt",
+      "messageType": "PROTOCOL_ERROR",
+      "from": "PROTOCOL_SYSTEM",
+      "to": "SYSTEM",
+      "content": "Protocol error in sendMessage: Message validation failed for type PROTOCOL_ANNOUNCEMENT: Unknown message type: PROTOCOL_ANNOUNCEMENT",
+      "metadata": {
+        "context": {
+          "method": "handleProtocolError"
+        }
+      },
+      "conversationId": "conversation_PROTOCOL_SYSTEM_SYSTEM_2025-05-26",
+      "threadId": "thread_general_2025-05-26"
+    }
+  ]
+}

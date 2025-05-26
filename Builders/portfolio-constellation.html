@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Constellation - Adaptive Project Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #0f0f23 0%, #010108 70%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow: hidden;
+            cursor: grab;
+        }
+        
+        body:active {
+            cursor: grabbing;
+        }
+        
+        .constellation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            perspective: 1000px;
+        }
+        
+        .project-node {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.8), rgba(0, 100, 255, 0.4));
+            border: 2px solid rgba(0, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+        
+        .project-node:hover {
+            transform: scale(1.1) translateZ(50px);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.8);
+            border-color: rgba(0, 255, 255, 1);
+        }
+        
+        .project-node.active {
+            transform: scale(1.3) translateZ(100px);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 100, 0, 0.8), rgba(255, 0, 100, 0.4));
+            border-color: rgba(255, 100, 0, 1);
+            box-shadow: 0 0 60px rgba(255, 100, 0, 0.8);
+        }
+        
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .project-tech {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        .project-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(0, 255, 255, 0.6) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(0, 255, 255, 0.6) 100%);
+            transform-origin: left center;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: flow 3s infinite;
+        }
+        
+        @keyframes flow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        .info-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 1.5rem;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .info-panel.visible {
+            transform: translateX(0);
+        }
+        
+        .info-title {
+            font-size: 1.5rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+        }
+        
+        .info-description {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .info-tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tech-tag {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .info-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .viewer-detector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 100, 0, 0.6);
+            border-radius: 10px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .viewer-type {
+            color: #ff6400;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .adaptation-status {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .control-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.6);
+            color: #00ffff;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="constellation-container" id="constellation">
+        <div class="stars" id="stars"></div>
+    </div>
+    
+    <div class="info-panel" id="infoPanel">
+        <div class="info-title" id="infoTitle">Select a Project</div>
+        <div class="info-description" id="infoDescription">
+            Click on any project node to explore the technical implementation and impact.
+        </div>
+        <div class="info-tech-stack" id="infoTechStack"></div>
+        <div class="info-metrics" id="infoMetrics"></div>
+    </div>
+    
+    <div class="viewer-detector">
+        <div class="viewer-type" id="viewerType">Analyzing Viewer...</div>
+        <div class="adaptation-status" id="adaptationStatus">Customizing presentation...</div>
+    </div>
+    
+    <div class="controls">
+        <button class="control-btn" onclick="resetView()">🏠 Reset</button>
+        <button class="control-btn" onclick="toggleAutoRotate()">🔄 Auto</button>
+        <button class="control-btn" onclick="exportView()">💾 Export</button>
+    </div>
+
+    <script>
+        class PortfolioConstellation {
+            constructor() {
+                this.projects = [
+                    {
+                        id: 'neurocalc',
+                        title: 'NeuroCalc',
+                        tech: 'React • TypeScript • AI',
+                        description: 'Advanced neurotransmitter calculation platform with AI-powered drug interaction analysis and real-time safety monitoring.',
+                        techStack: ['React', 'TypeScript', 'Electron', 'AI/ML', 'Real-time Systems'],
+                        metrics: {
+                            'Complexity': 'Enterprise',
+                            'Performance': '< 100ms',
+                            'Safety': 'Medical Grade',
+                            'Scale': '1000+ users'
+                        },
+                        color: '#00ffff',
+                        position: { x: 60, y: 30 }
+                    },
+                    {
+                        id: 'builders',
+                        title: 'Agent Builders',
+                        tech: 'Node.js • Multi-Agent • AI',
+                        description: 'Revolutionary 55+ agent collaboration system demonstrating unprecedented AI coordination and real-time distributed intelligence.',
+                        techStack: ['Node.js', 'Multi-Agent Systems', 'Real-time Communication', 'AI Coordination'],
+                        metrics: {
+                            'Agents': '55+ Active',
+                            'Coordination': 'Real-time',
+                            'Innovation': 'Breakthrough',
+                            'Scalability': 'Enterprise'
+                        },
+                        color: '#ff6400',
+                        position: { x: 20, y: 60 }
+                    },
+                    {
+                        id: 'collaborative',
+                        title: 'Collaborative Intelligence',
+                        tech: 'Python • Machine Learning • APIs',
+                        description: 'Advanced AI collaboration framework enabling seamless integration between multiple intelligence systems.',
+                        techStack: ['Python', 'Machine Learning', 'API Design', 'Integration Patterns'],
+                        metrics: {
+                            'Integration': 'Seamless',
+                            'Performance': 'Optimized',
+                            'Architecture': 'Scalable',
+                            'Intelligence': 'Advanced'
+                        },
+                        color: '#00ff88',
+                        position: { x: 75, y: 65 }
+                    },
+                    {
+                        id: 'marketing',
+                        title: 'Marketing Constellation',
+                        tech: 'Interactive • Adaptive • Live',
+                        description: 'Revolutionary marketing system that adapts presentation based on viewer type, demonstrating adaptive intelligence in real-time.',
+                        techStack: ['Interactive Design', 'Behavioral Analysis', 'Adaptive Systems', 'Real-time Customization'],
+                        metrics: {
+                            'Adaptation': 'Real-time',
+                            'Personalization': '100%',
+                            'Innovation': 'Revolutionary',
+                            'Impact': 'Maximum'
+                        },
+                        color: '#ff0088',
+                        position: { x: 40, y: 80 }
+                    }
+                ];
+                
+                this.viewerTypes = [
+                    { type: 'Technical Manager', focus: 'Architecture & Scalability' },
+                    { type: 'Senior Engineer', focus: 'Innovation & Technical Depth' },
+                    { type: 'Recruiter', focus: 'Skills & Business Impact' },
+                    { type: 'Startup Founder', focus: 'Execution & Results' }
+                ];
+                
+                this.currentViewer = 0;
+                this.autoRotate = true;
+                this.selectedProject = null;
+                
+                this.init();
+            }
+            
+            init() {
+                this.createStars();
+                this.createProjects();
+                this.createConnections();
+                this.startViewerRotation();
+                this.startAnimation();
+                this.setupInteractions();
+            }
+            
+            createStars() {
+                const starsContainer = document.getElementById('stars');
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    starsContainer.appendChild(star);
+                }
+            }
+            
+            createProjects() {
+                const container = document.getElementById('constellation');
+                
+                this.projects.forEach(project => {
+                    const node = document.createElement('div');
+                    node.className = 'project-node';
+                    node.id = project.id;
+                    node.style.left = project.position.x + '%';
+                    node.style.top = project.position.y + '%';
+                    node.style.borderColor = project.color;
+                    node.style.boxShadow = `0 0 30px ${project.color}`;
+                    
+                    node.innerHTML = `
+                        <div class="project-pulse"></div>
+                        <div class="project-title">${project.title}</div>
+                        <div class="project-tech">${project.tech}</div>
+                    `;
+                    
+                    node.addEventListener('click', () => this.selectProject(project));
+                    container.appendChild(node);
+                });
+            }
+            
+            createConnections() {
+                const container = document.getElementById('constellation');
+                
+                // Create connections between projects
+                for (let i = 0; i < this.projects.length; i++) {
+                    for (let j = i + 1; j < this.projects.length; j++) {
+                        const project1 = this.projects[i];
+                        const project2 = this.projects[j];
+                        
+                        const line = document.createElement('div');
+                        line.className = 'connection-line';
+                        
+                        const dx = (project2.position.x - project1.position.x) * window.innerWidth / 100;
+                        const dy = (project2.position.y - project1.position.y) * window.innerHeight / 100;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        
+                        line.style.left = project1.position.x + '%';
+                        line.style.top = project1.position.y + '%';
+                        line.style.width = distance + 'px';
+                        line.style.transform = `rotate(${angle}deg)`;
+                        line.style.animationDelay = Math.random() * 3 + 's';
+                        
+                        container.appendChild(line);
+                    }
+                }
+            }
+            
+            selectProject(project) {
+                // Clear previous selection
+                document.querySelectorAll('.project-node').forEach(node => {
+                    node.classList.remove('active');
+                });
+                
+                // Select new project
+                document.getElementById(project.id).classList.add('active');
+                this.selectedProject = project;
+                
+                // Update info panel
+                this.updateInfoPanel(project);
+            }
+            
+            updateInfoPanel(project) {
+                const panel = document.getElementById('infoPanel');
+                document.getElementById('infoTitle').textContent = project.title;
+                document.getElementById('infoDescription').textContent = project.description;
+                
+                // Update tech stack
+                const techStack = document.getElementById('infoTechStack');
+                techStack.innerHTML = project.techStack.map(tech => 
+                    `<span class="tech-tag">${tech}</span>`
+                ).join('');
+                
+                // Update metrics
+                const metrics = document.getElementById('infoMetrics');
+                metrics.innerHTML = Object.entries(project.metrics).map(([key, value]) =>
+                    `<div class="metric"><span>${key}:</span><span>${value}</span></div>`
+                ).join('');
+                
+                panel.classList.add('visible');
+            }
+            
+            startViewerRotation() {
+                setInterval(() => {
+                    if (this.autoRotate) {
+                        this.currentViewer = (this.currentViewer + 1) % this.viewerTypes.length;
+                        this.updateViewerDisplay();
+                        this.adaptPresentation();
+                    }
+                }, 5000);
+            }
+            
+            updateViewerDisplay() {
+                const viewer = this.viewerTypes[this.currentViewer];
+                document.getElementById('viewerType').textContent = viewer.type;
+                document.getElementById('adaptationStatus').textContent = `Focusing on: ${viewer.focus}`;
+            }
+            
+            adaptPresentation() {
+                const viewer = this.viewerTypes[this.currentViewer];
+                
+                // Adapt constellation based on viewer type
+                this.projects.forEach(project => {
+                    const node = document.getElementById(project.id);
+                    
+                    switch (viewer.type) {
+                        case 'Technical Manager':
+                            // Emphasize architecture and scale
+                            if (project.metrics.Scalability === 'Enterprise') {
+                                node.style.filter = 'brightness(1.3)';
+                            }
+                            break;
+                        case 'Senior Engineer':
+                            // Emphasize innovation and complexity
+                            if (project.metrics.Innovation === 'Breakthrough') {
+                                node.style.filter = 'brightness(1.3)';
+                            }
+                            break;
+                        case 'Recruiter':
+                            // Emphasize business impact and skills
+                            node.style.filter = 'brightness(1.1)';
+                            break;
+                        case 'Startup Founder':
+                            // Emphasize execution and results
+                            if (project.metrics.Performance) {
+                                node.style.filter = 'brightness(1.2)';
+                            }
+                            break;
+                    }
+                });
+            }
+            
+            startAnimation() {
+                let time = 0;
+                const animate = () => {
+                    time += 0.01;
+                    
+                    // Subtle orbital motion
+                    this.projects.forEach((project, index) => {
+                        const node = document.getElementById(project.id);
+                        const offset = index * Math.PI * 0.5;
+                        const x = Math.sin(time + offset) * 2;
+                        const y = Math.cos(time + offset) * 1;
+                        node.style.transform = `translate(${x}px, ${y}px)`;
+                    });
+                    
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }
+            
+            setupInteractions() {
+                // Click outside to deselect
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.project-node') && !e.target.closest('.info-panel')) {
+                        document.querySelectorAll('.project-node').forEach(node => {
+                            node.classList.remove('active');
+                        });
+                        document.getElementById('infoPanel').classList.remove('visible');
+                        this.selectedProject = null;
+                    }
+                });
+            }
+        }
+        
+        // Global functions
+        function resetView() {
+            document.querySelectorAll('.project-node').forEach(node => {
+                node.classList.remove('active');
+                node.style.filter = 'brightness(1)';
+            });
+            document.getElementById('infoPanel').classList.remove('visible');
+        }
+        
+        function toggleAutoRotate() {
+            window.constellation.autoRotate = !window.constellation.autoRotate;
+        }
+        
+        function exportView() {
+            const data = {
+                selectedProject: window.constellation.selectedProject,
+                currentViewer: window.constellation.viewerTypes[window.constellation.currentViewer],
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `portfolio-view-${Date.now()}.json`;
+            a.click();
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            window.constellation = new PortfolioConstellation();
+        });
+    </script>
+</body>
+</html>
