@@ -24,6 +24,11 @@
 ### Core Marketing Message
 > "Our architect doesn't just build systems - they conduct symphonies of AI agents creating the impossible in real-time."
 
+### Values-Driven Development Philosophy
+The architect behind Project Constellation draws inspiration from **music** (creating harmony in coordination), **hard work** (building solid foundations), **social interaction** (systems that bring people together), **making people feel good** (technology that creates joy), **animals** (natural collaboration patterns), **earth & ocean** (systems that flow naturally and connect everything). 
+
+This isn't just technical expertise - this is technical leadership with heart, creating systems that feel as beautiful and natural as they are sophisticated.
+
 ## Agent Coordination Status
 
 ### Active Agents & Specializations

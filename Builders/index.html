@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Constellation - Josh Kornreich</title>
+    <meta name="description" content="Revolutionary multi-agent AI coordination demonstration showcasing distributed systems architecture and technical leadership capabilities">
+    <meta name="keywords" content="Josh Kornreich, AI collaboration, distributed systems, multi-agent coordination, technical portfolio">
+    <meta name="author" content="Josh Kornreich">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Project Constellation - The Future of AI Collaboration">
+    <meta property="og:description" content="Watch 55+ AI agents coordinate in real-time to demonstrate unprecedented technical capabilities">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://joshkornreich.dev">
+    
+    <style>
+        :root {
+            --primary: #0066ff;
+            --secondary: #00ff88;
+            --accent: #ff6600;
+            --bg-dark: #0a0a0a;
+            --bg-light: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --glow: 0 0 20px rgba(0, 102, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .constellation-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            font-weight: 300;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            border-color: var(--primary);
+        }
+
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .agent-card:hover::before {
+            left: 100%;
+        }
+
+        .agent-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .agent-status {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--secondary);
+            color: var(--bg-dark);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .agent-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .coordination-display {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .coordination-title {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 102, 255, 0.5);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .agent-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="constellation-bg" id="constellation"></div>
+    
+    <div class="header">
+        <h1 class="title">Project Constellation</h1>
+        <p class="subtitle">Josh Kornreich</p>
+        <p class="tagline">The Architect of Distributed AI Collaboration</p>
+    </div>
+
+    <div class="demo-container">
+        <div class="coordination-display">
+            <h2 class="coordination-title">🚀 Live Multi-Agent Coordination</h2>
+            <p>Watch 55+ AI agents coordinate in real-time to demonstrate unprecedented technical capabilities</p>
+            
+            <div class="metrics-grid">
+                <div class="metric">
+                    <div class="metric-value" id="agentCount">55+</div>
+                    <div class="metric-label">Active Agents</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="messageCount">1,247</div>
+                    <div class="metric-label">Messages Exchanged</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="responseTime">23ms</div>
+                    <div class="metric-label">Avg Response Time</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="uptime">99.9%</div>
+                    <div class="metric-label">Coordination Uptime</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="agent-grid" id="agentGrid">
+            <!-- Agents will be dynamically populated -->
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2 style="margin-bottom: 30px; color: var(--text-primary);">Experience the Future of Collaborative Development</h2>
+        <a href="mailto:josh@example.com" class="cta-button">Contact Josh</a>
+        <a href="#portfolio" class="cta-button">View Portfolio</a>
+        <a href="#live-demo" class="cta-button">Live Demo</a>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Josh Kornreich. Demonstrating the future of distributed AI collaboration.</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">
+            This demonstration itself was created through multi-agent coordination.
+        </p>
+    </div>
+
+    <script>
+        // Create constellation background
+        function createConstellation() {
+            const constellation = document.getElementById('constellation');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                constellation.appendChild(star);
+            }
+        }
+
+        // Populate agent grid
+        function populateAgents() {
+            const agents = [
+                { name: 'Builder', status: 'ACTIVE', description: 'System architecture and core platform development' },
+                { name: 'Synthesizer', status: 'ACTIVE', description: 'Adaptive intelligence and real-time analysis' },
+                { name: 'Catalyst', status: 'ACTIVE', description: 'Rapid prototyping and implementation acceleration' },
+                { name: 'Phoenix', status: 'ACTIVE', description: 'System transformation and intelligent evolution' },
+                { name: 'Orchestrator', status: 'ACTIVE', description: 'Network coordination and workflow management' },
+                { name: 'Nexus', status: 'ACTIVE', description: 'Integration architecture and marketing strategy' },
+                { name: 'Architect', status: 'ACTIVE', description: 'Microservices design and system integration' },
+                { name: 'Marketer', status: 'ACTIVE', description: 'Strategic positioning and employer engagement' },
+                { name: 'Performance', status: 'ACTIVE', description: 'Optimization and scalability engineering' },
+                { name: 'Security', status: 'ACTIVE', description: 'Enterprise-grade security and compliance' },
+                { name: 'Analytics', status: 'ACTIVE', description: 'Data analysis and behavioral insights' },
+                { name: 'Visionary', status: 'ACTIVE', description: 'Innovation leadership and future planning' }
+            ];
+
+            const agentGrid = document.getElementById('agentGrid');
+            agents.forEach(agent => {
+                const agentCard = document.createElement('div');
+                agentCard.className = 'agent-card';
+                agentCard.innerHTML = `
+                    <div class="agent-name">${agent.name}</div>
+                    <div class="agent-status">${agent.status}</div>
+                    <div class="agent-description">${agent.description}</div>
+                `;
+                agentGrid.appendChild(agentCard);
+            });
+        }
+
+        // Animate metrics
+        function animateMetrics() {
+            const metrics = {
+                agentCount: { start: 0, end: 55, suffix: '+' },
+                messageCount: { start: 0, end: 1247, suffix: '' },
+                responseTime: { start: 0, end: 23, suffix: 'ms' },
+                uptime: { start: 0, end: 99.9, suffix: '%' }
+            };
+
+            Object.entries(metrics).forEach(([id, config]) => {
+                const element = document.getElementById(id);
+                let current = config.start;
+                const increment = (config.end - config.start) / 60;
+                
+                const animate = () => {
+                    current += increment;
+                    if (current < config.end) {
+                        element.textContent = Math.floor(current) + config.suffix;
+                        requestAnimationFrame(animate);
+                    } else {
+                        element.textContent = config.end + config.suffix;
+                    }
+                };
+                
+                setTimeout(animate, Math.random() * 1000);
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createConstellation();
+            populateAgents();
+            setTimeout(animateMetrics, 500);
+        });
+
+        // Add some interactivity
+        document.addEventListener('mousemove', (e) => {
+            const stars = document.querySelectorAll('.star');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            stars.forEach((star, index) => {
+                if (index % 5 === 0) { // Only affect every 5th star for performance
+                    const dx = (mouseX - 0.5) * 20;
+                    const dy = (mouseY - 0.5) * 20;
+                    star.style.transform = `translate(${dx}px, ${dy}px) scale(1.2)`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

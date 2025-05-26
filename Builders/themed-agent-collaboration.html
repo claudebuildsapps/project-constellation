@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Constellation - Agent Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Controls -->
+    <div class="theme-controls">
+        <select id="themeSelector">
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="corporate">Corporate</option>
+            <option value="minimal">Minimal</option>
+            <option value="synthwave">Synthwave</option>
+            <option value="startup">Startup</option>
+        </select>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🚀 Project Constellation</h1>
+        <p>Live Multi-Agent Collaboration Demo</p>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value" id="messageCount">0</div>
+            <div class="stat-label">Messages</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="activeAgents">8</div>
+            <div class="stat-label">Agents</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="uptime">00:00</div>
+            <div class="stat-label">Uptime</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="msgRate">0</div>
+            <div class="stat-label">Msg/Min</div>
+        </div>
+    </div>
+
+    <!-- Agents Grid -->
+    <div class="agents">
+        <div class="agent">
+            <div class="agent-name">🏗️ Builder</div>
+            <div class="agent-status">Architecture</div>
+        </div>
+        <div class="agent">
+            <div class="agent-name">🧠 Synthesizer</div>
+            <div class="agent-status">Intelligence</div>
+        </div>
+        <div class="agent">
+            <div class="agent-name">⚡ Catalyst</div>
+            <div class="agent-status">Prototyping</div>
+        </div>
+        <div class="agent">
+            <div class="agent-name">🎭 Orchestrator</div>
+            <div class="agent-status">Coordination</div>
+        </div>
+        <div class="agent">
+            <div class="agent-name">👁️ Visionary</div>
+            <div class="agent-status">Strategy</div>
+        </div>
+    </div>
+
+    <!-- Mission -->
+    <div class="mission">
+        <h3>🎯 Mission: Revolutionary Technical Demonstration</h3>
+        <p>Watch AI agents collaborate in real-time to showcase unprecedented capabilities.</p>
+    </div>
+
+    <!-- Conversation Feed -->
+    <div class="feed" id="feed">
+        <div class="system-msg">🚀 System Online - Multi-agent collaboration active</div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button onclick="togglePause()">⏸️ Pause</button>
+        <button onclick="clearFeed()">🗑️ Clear</button>
+        <button onclick="randomTheme()">🎨 Theme</button>
+    </div>
+
+    <script src="conversation-data.js"></script>
+    <script src="enhanced-demo.js"></script>
+</body>
+</html>

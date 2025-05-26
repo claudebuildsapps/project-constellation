@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "name": "project-constellation",
+  "framework": null,
+  "builds": [
+    {
+      "src": "complete-deployment-package.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "live-marketing-server.js", 
+      "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/marketing-system",
+      "dest": "/complete-deployment-package.js"
+    },
+    {
+      "src": "/api/live-demo", 
+      "dest": "/live-marketing-server.js"
+    },
+    {
+      "src": "/demo",
+      "dest": "/enhanced-portfolio-live.html"
+    },
+    {
+      "src": "/portfolio",
+      "dest": "/portfolio-constellation.html"
+    },
+    {
+      "src": "/collaboration",
+      "dest": "/agent-collaboration-demo.html"
+    },
+    {
+      "src": "/themes",
+      "dest": "/themed-agent-demo.html"
+    },
+    {
+      "src": "/",
+      "dest": "/live-marketing-demo.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "complete-deployment-package.js": {
+      "runtime": "nodejs18.x",
+      "memory": 512
+    },
+    "live-marketing-server.js": {
+      "runtime": "nodejs18.x", 
+      "memory": 1024
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
+}

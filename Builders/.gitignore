@@ -63,10 +63,33 @@ logs/*.log
 analytics/data/
 tracking/data/
 metrics/raw/
+viewer-sessions/
+behavior-data/
 
 # Performance testing results
 benchmark-results/
 performance-logs/
+
+# Large build artifacts and assets
+*.zip
+*.tar.gz
+*.rar
+*.7z
+public/downloads/
+static/downloads/
+assets/videos/
+assets/large/
+
+# User data and sessions
+user-data/
+uploads/
+sessions/
+demo-recordings/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
 
 # Backup files
 *.backup

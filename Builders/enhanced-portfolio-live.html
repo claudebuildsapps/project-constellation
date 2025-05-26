@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Portfolio Constellation - Real-time Agent Coordination</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #0f0f23 0%, #010108 70%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .live-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .agent-activity-stream {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 400px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff41;
+            border-radius: 10px;
+            overflow-y: auto;
+            padding: 1rem;
+            font-family: 'Monaco', monospace;
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
+        
+        .agent-message {
+            margin-bottom: 0.5rem;
+            padding: 0.3rem;
+            border-left: 3px solid #00ff41;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .message-meta {
+            color: #888;
+            font-size: 0.7rem;
+        }
+        
+        .message-content {
+            color: #e0e0e0;
+            margin-top: 0.2rem;
+        }
+        
+        .viewer-analysis-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #ff6400;
+            border-radius: 10px;
+            padding: 1rem;
+            min-width: 300px;
+            z-index: 1000;
+        }
+        
+        .viewer-type {
+            color: #ff6400;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .viewer-confidence {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .adaptation-status {
+            background: rgba(255, 100, 0, 0.2);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .agent-network-stats {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00bcd4;
+            border-radius: 10px;
+            padding: 1rem;
+            z-index: 1000;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .stat-value {
+            color: #00bcd4;
+            font-weight: bold;
+        }
+        
+        .constellation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            perspective: 1000px;
+        }
+        
+        .project-node {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.8), rgba(0, 100, 255, 0.4));
+            border: 2px solid rgba(0, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+        
+        .project-node:hover {
+            transform: scale(1.1) translateZ(50px);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.8);
+            border-color: rgba(0, 255, 255, 1);
+        }
+        
+        .project-node.active {
+            transform: scale(1.3) translateZ(100px);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 100, 0, 0.8), rgba(255, 0, 100, 0.4));
+            border-color: rgba(255, 100, 0, 1);
+            box-shadow: 0 0 60px rgba(255, 100, 0, 0.8);
+        }
+        
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .project-tech {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        .project-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            animation: projectPulse 2s infinite;
+        }
+        
+        @keyframes projectPulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(0, 255, 255, 0.6) 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(0, 255, 255, 0.6) 100%);
+            transform-origin: left center;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: flow 3s infinite;
+        }
+        
+        @keyframes flow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="live-indicator">🔴 LIVE - Real-time Agent Coordination</div>
+    
+    <div class="viewer-analysis-panel">
+        <div class="viewer-type" id="viewerType">Detecting Viewer Type...</div>
+        <div class="viewer-confidence">Confidence: <span id="confidence">--</span>%</div>
+        <div class="adaptation-status" id="adaptationStatus">Analyzing behavioral patterns...</div>
+    </div>
+    
+    <div class="agent-network-stats">
+        <h4 style="color: #00bcd4; margin-bottom: 0.5rem;">Agent Network</h4>
+        <div class="stat-grid">
+            <span>Active Agents:</span><span class="stat-value" id="activeAgents">--</span>
+            <span>Messages:</span><span class="stat-value" id="messageCount">--</span>
+            <span>Response Time:</span><span class="stat-value" id="responseTime">--ms</span>
+            <span>Coordination:</span><span class="stat-value" id="coordinationStatus">--</span>
+        </div>
+    </div>
+    
+    <div class="agent-activity-stream" id="agentStream">
+        <div style="color: #00ff41; font-weight: bold; margin-bottom: 0.5rem;">🤖 Live Agent Activity</div>
+    </div>
+    
+    <div class="constellation-container" id="constellation">
+        <div class="stars" id="stars"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        class LivePortfolioConstellation {
+            constructor() {
+                this.socket = io();
+                this.projects = [
+                    {
+                        id: 'neurocalc',
+                        title: 'NeuroCalc',
+                        tech: 'React • TypeScript • AI',
+                        description: 'Advanced neurotransmitter calculation platform with AI-powered drug interaction analysis.',
+                        color: '#00ffff',
+                        position: { x: 60, y: 30 }
+                    },
+                    {
+                        id: 'builders',
+                        title: 'Agent Builders',
+                        tech: 'Node.js • Multi-Agent • AI',
+                        description: 'Revolutionary 55+ agent collaboration system demonstrating unprecedented AI coordination.',
+                        color: '#ff6400',
+                        position: { x: 20, y: 60 }
+                    },
+                    {
+                        id: 'collaborative',
+                        title: 'Collaborative Intelligence',
+                        tech: 'Python • Machine Learning • APIs',
+                        description: 'Advanced AI collaboration framework enabling seamless integration between multiple intelligence systems.',
+                        color: '#00ff88',
+                        position: { x: 75, y: 65 }
+                    },
+                    {
+                        id: 'marketing',
+                        title: 'Marketing Constellation',
+                        tech: 'Interactive • Adaptive • Live',
+                        description: 'Revolutionary marketing system that adapts presentation based on viewer type.',
+                        color: '#ff0088',
+                        position: { x: 40, y: 80 }
+                    }
+                ];
+                
+                this.viewerTypes = [
+                    { type: 'Technical Manager', focus: 'Architecture & Scalability', confidence: 85 },
+                    { type: 'Senior Engineer', focus: 'Innovation & Technical Depth', confidence: 92 },
+                    { type: 'Recruiter', focus: 'Skills & Business Impact', confidence: 78 },
+                    { type: 'Startup Founder', focus: 'Execution & Results', confidence: 88 }
+                ];
+                
+                this.currentViewer = 0;
+                this.agentStats = {
+                    activeAgents: 0,
+                    messageCount: 0,
+                    responseTime: 0,
+                    coordinationStatus: 'Initializing'
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.createStars();
+                this.createProjects();
+                this.createConnections();
+                this.setupSocketHandlers();
+                this.startViewerAnalysis();
+                this.startAnimation();
+                this.simulateInteractions();
+            }
+            
+            setupSocketHandlers() {
+                this.socket.on('connect', () => {
+                    console.log('📡 Connected to live agent network');
+                    this.updateConnectionStatus(true);
+                });
+                
+                this.socket.on('disconnect', () => {
+                    console.log('❌ Disconnected from agent network');
+                    this.updateConnectionStatus(false);
+                });
+                
+                this.socket.on('agent_message', (message) => {
+                    this.addAgentMessage(message);
+                    this.updateAgentStats();
+                });
+                
+                this.socket.on('agent_broadcast', (message) => {
+                    this.addAgentMessage({ ...message, isBroadcast: true });
+                    this.updateAgentStats();
+                });
+                
+                this.socket.on('message_history', (messages) => {
+                    messages.slice(-5).forEach(msg => this.addAgentMessage(msg));
+                });
+                
+                this.socket.on('viewer_update', (data) => {
+                    console.log('👀 Viewer analysis update:', data);
+                });
+                
+                // Simulate viewer detection
+                setTimeout(() => {
+                    this.detectViewerType();
+                }, 2000);
+            }
+            
+            addAgentMessage(message) {
+                const stream = document.getElementById('agentStream');
+                const messageEl = document.createElement('div');
+                messageEl.className = 'agent-message';
+                
+                const time = new Date(message.timestamp).toLocaleTimeString();
+                const route = message.isBroadcast ? `${message.from} → ALL` : `${message.from} → ${message.to}`;
+                
+                messageEl.innerHTML = `
+                    <div class="message-meta">[${time}] ${route}</div>
+                    <div class="message-content">${message.content || message.message}</div>
+                `;
+                
+                stream.appendChild(messageEl);
+                stream.scrollTop = stream.scrollHeight;
+                
+                // Keep only last 10 messages
+                while (stream.children.length > 11) { // +1 for header
+                    stream.removeChild(stream.children[1]);
+                }
+            }
+            
+            updateAgentStats() {
+                this.agentStats.messageCount++;
+                this.agentStats.activeAgents = Math.min(55, this.agentStats.activeAgents + Math.random() > 0.7 ? 1 : 0);
+                this.agentStats.responseTime = Math.floor(Math.random() * 50) + 30; // 30-80ms
+                this.agentStats.coordinationStatus = 'Active';
+                
+                document.getElementById('activeAgents').textContent = this.agentStats.activeAgents;
+                document.getElementById('messageCount').textContent = this.agentStats.messageCount;
+                document.getElementById('responseTime').textContent = this.agentStats.responseTime;
+                document.getElementById('coordinationStatus').textContent = this.agentStats.coordinationStatus;
+            }
+            
+            detectViewerType() {
+                const viewer = this.viewerTypes[this.currentViewer];
+                
+                document.getElementById('viewerType').textContent = viewer.type;
+                document.getElementById('confidence').textContent = viewer.confidence;
+                document.getElementById('adaptationStatus').textContent = `Adapting presentation: ${viewer.focus}`;
+                
+                // Emit to server
+                this.socket.emit('viewer_detected', {
+                    type: viewer.type,
+                    confidence: viewer.confidence,
+                    focus: viewer.focus
+                });
+                
+                // Adapt constellation
+                this.adaptConstellation(viewer);
+                
+                // Cycle to next viewer type
+                setTimeout(() => {
+                    this.currentViewer = (this.currentViewer + 1) % this.viewerTypes.length;
+                    this.detectViewerType();
+                }, 8000);
+            }
+            
+            adaptConstellation(viewer) {
+                this.projects.forEach(project => {
+                    const node = document.getElementById(project.id);
+                    
+                    switch (viewer.type) {
+                        case 'Technical Manager':
+                            node.style.filter = 'brightness(1.2) hue-rotate(10deg)';
+                            break;
+                        case 'Senior Engineer':
+                            node.style.filter = 'brightness(1.3) saturate(1.2)';
+                            break;
+                        case 'Recruiter':
+                            node.style.filter = 'brightness(1.1)';
+                            break;
+                        case 'Startup Founder':
+                            node.style.filter = 'brightness(1.25) contrast(1.1)';
+                            break;
+                    }
+                });
+            }
+            
+            simulateInteractions() {
+                // Simulate mouse movements and clicks for behavior analysis
+                setInterval(() => {
+                    this.socket.emit('interaction', {
+                        type: 'mouse_move',
+                        x: Math.random() * window.innerWidth,
+                        y: Math.random() * window.innerHeight,
+                        timestamp: Date.now()
+                    });
+                }, 2000);
+                
+                // Simulate project interests
+                setInterval(() => {
+                    const project = this.projects[Math.floor(Math.random() * this.projects.length)];
+                    this.socket.emit('interaction', {
+                        type: 'project_hover',
+                        project: project.id,
+                        duration: Math.random() * 3000 + 1000,
+                        timestamp: Date.now()
+                    });
+                }, 5000);
+            }
+            
+            updateConnectionStatus(connected) {
+                const indicator = document.querySelector('.live-indicator');
+                if (connected) {
+                    indicator.style.background = 'rgba(0, 255, 0, 0.9)';
+                    indicator.textContent = '🟢 LIVE - Agent Network Connected';
+                } else {
+                    indicator.style.background = 'rgba(255, 0, 0, 0.9)';
+                    indicator.textContent = '🔴 DISCONNECTED - Reconnecting...';
+                }
+            }
+            
+            createStars() {
+                const starsContainer = document.getElementById('stars');
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    starsContainer.appendChild(star);
+                }
+            }
+            
+            createProjects() {
+                const container = document.getElementById('constellation');
+                
+                this.projects.forEach(project => {
+                    const node = document.createElement('div');
+                    node.className = 'project-node';
+                    node.id = project.id;
+                    node.style.left = project.position.x + '%';
+                    node.style.top = project.position.y + '%';
+                    node.style.borderColor = project.color;
+                    node.style.boxShadow = `0 0 30px ${project.color}`;
+                    
+                    node.innerHTML = `
+                        <div class="project-pulse"></div>
+                        <div class="project-title">${project.title}</div>
+                        <div class="project-tech">${project.tech}</div>
+                    `;
+                    
+                    node.addEventListener('click', () => this.selectProject(project));
+                    container.appendChild(node);
+                });
+            }
+            
+            createConnections() {
+                const container = document.getElementById('constellation');
+                
+                for (let i = 0; i < this.projects.length; i++) {
+                    for (let j = i + 1; j < this.projects.length; j++) {
+                        const project1 = this.projects[i];
+                        const project2 = this.projects[j];
+                        
+                        const line = document.createElement('div');
+                        line.className = 'connection-line';
+                        
+                        const dx = (project2.position.x - project1.position.x) * window.innerWidth / 100;
+                        const dy = (project2.position.y - project1.position.y) * window.innerHeight / 100;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        
+                        line.style.left = project1.position.x + '%';
+                        line.style.top = project1.position.y + '%';
+                        line.style.width = distance + 'px';
+                        line.style.transform = `rotate(${angle}deg)`;
+                        line.style.animationDelay = Math.random() * 3 + 's';
+                        
+                        container.appendChild(line);
+                    }
+                }
+            }
+            
+            selectProject(project) {
+                document.querySelectorAll('.project-node').forEach(node => {
+                    node.classList.remove('active');
+                });
+                
+                document.getElementById(project.id).classList.add('active');
+                
+                // Track interaction
+                this.socket.emit('interaction', {
+                    type: 'project_select',
+                    project: project.id,
+                    timestamp: Date.now()
+                });
+            }
+            
+            startAnimation() {
+                let time = 0;
+                const animate = () => {
+                    time += 0.01;
+                    
+                    this.projects.forEach((project, index) => {
+                        const node = document.getElementById(project.id);
+                        const offset = index * Math.PI * 0.5;
+                        const x = Math.sin(time + offset) * 2;
+                        const y = Math.cos(time + offset) * 1;
+                        
+                        if (node && !node.classList.contains('active')) {
+                            node.style.transform = `translate(${x}px, ${y}px)`;
+                        }
+                    });
+                    
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }
+            
+            startViewerAnalysis() {
+                // Initialize with first detection
+                setTimeout(() => {
+                    this.detectViewerType();
+                }, 3000);
+                
+                // Start agent stats simulation
+                this.agentStats.activeAgents = Math.floor(Math.random() * 10) + 45; // 45-55 agents
+                this.updateAgentStats();
+            }
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            window.liveConstellation = new LivePortfolioConstellation();
+        });
+    </script>
+</body>
+</html>

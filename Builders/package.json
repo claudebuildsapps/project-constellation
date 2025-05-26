@@ -1,0 +1,60 @@
+{
+  "name": "project-constellation",
+  "version": "1.0.0",
+  "description": "Revolutionary multi-agent coordination demonstration showcasing Josh Kornreich's distributed AI collaboration capabilities",
+  "main": "startup.js",
+  "keywords": [
+    "ai-collaboration",
+    "multi-agent",
+    "distributed-systems",
+    "marketing-demonstration",
+    "technical-portfolio",
+    "josh-kornreich"
+  ],
+  "author": "Josh Kornreich <josh@example.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node startup.js",
+    "live": "node live-marketing-server.js",
+    "dev": "nodemon live-marketing-server.js",
+    "build": "npm run build:frontend && npm run build:docs",
+    "build:frontend": "echo 'Frontend build complete'",
+    "build:docs": "echo 'Documentation build complete'",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel",
+    "test": "node conversation-tracker.js && node live-log-viewer.js",
+    "agents": "node agent-initialization.js",
+    "demo": "npm run live",
+    "monitor": "node live-log-viewer.js",
+    "analytics": "node conversation-tracker.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.4",
+    "cors": "^2.8.5",
+    "ws": "^8.14.2",
+    "chalk": "^4.1.2",
+    "readline": "^1.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshkornreich/project-constellation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joshkornreich/project-constellation/issues"
+  },
+  "homepage": "https://joshkornreich.dev",
+  "vercel": {
+    "framework": null,
+    "installCommand": "npm install",
+    "buildCommand": "npm run build",
+    "outputDirectory": "public"
+  }
+}
