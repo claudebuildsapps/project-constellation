@@ -1,0 +1,85 @@
+# Project Constellation - Professional .gitignore
+
+# Deployment artifacts
+.vercel/
+.netlify/
+dist/
+build/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# API keys and configuration (if any added later)
+config/secrets.js
+*.key
+*.pem
+
+# Node modules (if we add npm dependencies)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package manager lock files (keep package.json but ignore locks for flexibility)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Operating system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# Log files
+*.log
+logs/*.log
+
+# Claude Code specific
+.claude/cache/
+.claude/temp/
+
+# Analytics and tracking data (keep the code, ignore collected data)
+analytics/data/
+tracking/data/
+metrics/raw/
+
+# Performance testing results
+benchmark-results/
+performance-logs/
+
+# Backup files
+*.backup
+*.bak
+
+# Development testing files
+test-data/
+dev-testing/
+
+# Documentation drafts (keep final docs)
+docs/drafts/
+*.draft.md
+
+# Optional: IDE-specific files
+.vscode/settings.json
+.vscode/launch.json
